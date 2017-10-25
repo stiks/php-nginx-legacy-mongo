@@ -2,10 +2,10 @@
 
 This image is being used by very old project.
 
-* Alphine Linux
+* Alphine Linux (Currently using 3.5)
 * Minimal setup
-* Small size
-* Nginx with PHP FPM
+* Small size (under 50 mb)
+* Nginx with PHP 5.6 FPM
 * Legacy Mongo Driver 1.6
 
 Usage Example:
@@ -22,4 +22,12 @@ In my images, I don't really need git after I've setup everything
 
 ```
 RUN apk delete git
+```
+
+# Build
+
+Build process require GITHUB TOKEN:
+
+```
+docker build . --build-arg GITHUB_OAUTH_TOKEN=REPLACE_WITH_YOUR_GITHUB_TOKEN
 ```
