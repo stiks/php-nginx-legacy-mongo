@@ -35,6 +35,7 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
       memcached \
       libmemcached-dev \
       cyrus-sasl-dev \
+      libpng-dev \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && mkdir /app \
     && curl -L -o /tmp/mongo.tar.gz https://pecl.php.net/get/mongo-1.6.16.tgz \
@@ -47,7 +48,6 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
     && ./configure \
     && make all \
     && docker-php-ext-install mongo \
-    && docker-php-ext-enable mongo \
     && curl -L -o /tmp/memcached.tar.gz https://pecl.php.net/get/memcached-2.2.0.tgz \
     && tar xfz /tmp/memcached.tar.gz -C /tmp/ \
     && mkdir -p /usr/src/php/ext/memcached \
@@ -57,8 +57,7 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
     && phpize \
     && ./configure \
     && make all \
-    && docker-php-ext-install memcached \
-    && docker-php-ext-enable memcached \
+    && docker-php-ext-install memcached gd \
     && docker-php-source delete \
     && apk del .build-deps \
     && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
