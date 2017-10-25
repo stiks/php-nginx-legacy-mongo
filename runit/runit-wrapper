@@ -1,0 +1,20 @@
+#!/bin/sh
+
+main() {
+    # Dump environment
+    export > /env
+
+    trap onterm SIGTERM SIGINT
+
+    echo "Starting runit"
+    exec runsvdir -P /etc/service &
+    wait "$!"
+}
+
+onterm() {
+    echo "Exiting..."
+    pkill -SIGHUP runsvdir
+    exit $?
+}
+
+main "$@"
