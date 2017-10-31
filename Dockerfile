@@ -32,9 +32,6 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
       runit \
       git \
       nginx \
-      memcached \
-      libmemcached-dev \
-      cyrus-sasl-dev \
       libpng-dev \
     && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
     && mkdir /app \
@@ -48,16 +45,7 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
     && ./configure \
     && make all \
     && docker-php-ext-install mongo \
-    && curl -L -o /tmp/memcached.tar.gz https://pecl.php.net/get/memcached-2.2.0.tgz \
-    && tar xfz /tmp/memcached.tar.gz -C /tmp/ \
-    && mkdir -p /usr/src/php/ext/memcached \
-    && mv /tmp/memcached-2.2.0/* /usr/src/php/ext/memcached \
-    && rm -r /tmp/memcached* \
-    && cd /usr/src/php/ext/memcached \
-    && phpize \
-    && ./configure \
-    && make all \
-    && docker-php-ext-install memcached gd \
+    && docker-php-ext-install gd \
     && docker-php-source delete \
     && apk del .build-deps \
     && cp /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
@@ -102,14 +90,6 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
       echo 'exec /usr/sbin/nginx -c /etc/nginx/nginx.conf  -g "daemon off;"'; \
     } | tee /etc/service/nginx/run \
     && chmod +x /etc/service/nginx/run \
-    && mkdir -p /etc/service/memcached \
-    && { \
-      echo '#!/bin/sh'; \
-      echo 'exec 2>&1'; \
-      echo 'mkdir -p /run/memcached'; \
-      echo 'exec /usr/bin/memcached -u nginx'; \
-    } | tee /etc/service/memcached/run \
-    && chmod +x /etc/service/memcached/run \
     && mkdir /etc/service/php5-fpm \
     && { \
       echo '#!/bin/sh'; \
