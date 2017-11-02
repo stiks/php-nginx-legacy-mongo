@@ -122,7 +122,7 @@ ONBUILD ARG GITHUB_OAUTH_TOKEN
 
 ONBUILD RUN php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer config -g github-oauth.github.com $GITHUB_OAUTH_TOKEN \
-    && composer global require hirak/prestissimo --no-progress --profile --no-suggest --no-interaction --no-dev 
+    && composer global require hirak/prestissimo --no-progress --profile --no-suggest --no-interaction
 
 WORKDIR /app
 
