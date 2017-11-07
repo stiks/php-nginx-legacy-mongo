@@ -47,6 +47,16 @@ RUN sed -i -e 's/v3\.4/v3\.5/g' /etc/apk/repositories \
     && ./configure \
     && make all \
     && docker-php-ext-install mongo \
+		&& curl -L -o /tmp/mongodb.tar.gz https://pecl.php.net/get/mongodb-1.3.2.tgz \
+		&& tar xfz /tmp/mongodb.tar.gz -C /tmp/ \
+		&& mkdir -p /usr/src/php/ext/mongodb \
+		&& mv /tmp/mongodb-1.3.2/* /usr/src/php/ext/mongodb \
+		&& rm -r /tmp/mongodb* \
+		&& cd /usr/src/php/ext/mongodb \
+		&& phpize \
+		&& ./configure \
+		&& make all \
+		&& docker-php-ext-install mongodb \
     && curl -L -o /tmp/memcached.tar.gz https://pecl.php.net/get/memcached-2.2.0.tgz \
     && tar xfz /tmp/memcached.tar.gz -C /tmp/ \
     && mkdir -p /usr/src/php/ext/memcached \
